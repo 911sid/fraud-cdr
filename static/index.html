@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fraud Detection App</title>
+    <link rel="stylesheet" href="static/styles.css" />
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Fraud Detection</h1>
+            <p>Accurately predict potential fraudulent activity using AI.</p>
+        </div>
+
+        <form id="prediction-form">
+            <div class="form-row">
+                <div class="input-group">
+                    <label for="account_length">Account Length</label>
+                    <input type="number" id="account_length" required />
+                </div>
+                <div class="input-group">
+                    <label for="vmail_message">VMail Message</label>
+                    <input type="number" id="vmail_message" required />
+                </div>
+                <div class="input-group">
+                    <label for="day_mins">Day Minutes</label>
+                    <input type="number" id="day_mins" step="0.01" required />
+                </div>
+                <div class="input-group">
+                    <label for="day_calls">Day Calls</label>
+                    <input type="number" id="day_calls" required />
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="input-group">
+                    <label for="day_charge">Day Charge</label>
+                    <input type="number" id="day_charge" step="0.01" required />
+                </div>
+                <div class="input-group">
+                    <label for="eve_mins">Evening Minutes</label>
+                    <input type="number" id="eve_mins" step="0.01" required />
+                </div>
+                <div class="input-group">
+                    <label for="eve_calls">Evening Calls</label>
+                    <input type="number" id="eve_calls" required />
+                </div>
+                <div class="input-group">
+                    <label for="eve_charge">Evening Charge</label>
+                    <input type="number" id="eve_charge" step="0.01" required />
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="input-group">
+                    <label for="night_mins">Night Minutes</label>
+                    <input type="number" id="night_mins" step="0.01" required />
+                </div>
+                <div class="input-group">
+                    <label for="night_calls">Night Calls</label>
+                    <input type="number" id="night_calls" required />
+                </div>
+                <div class="input-group">
+                    <label for="night_charge">Night Charge</label>
+                    <input type="number" id="night_charge" step="0.01" required />
+                </div>
+                <div class="input-group">
+                    <label for="intl_mins">International Minutes</label>
+                    <input type="number" id="intl_mins" step="0.01" required />
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="input-group">
+                    <label for="intl_calls">International Calls</label>
+                    <input type="number" id="intl_calls" required />
+                </div>
+                <div class="input-group">
+                    <label for="intl_charge">International Charge</label>
+                    <input type="number" id="intl_charge" step="0.01" required />
+                </div>
+                <div class="input-group">
+                    <label for="cust_service_calls">Customer Service Calls</label>
+                    <input type="number" id="cust_service_calls" required />
+                </div>
+            </div>
+
+            <button type="submit">Predict</button>
+        </form>
+
+        <div id="result"></div>
+    </div>
+
+    <script>
+        document.getElementById('prediction-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const data = {
+                Account_Length: parseInt(document.getElementById('account_length').value),
+                VMail_Message: parseInt(document.getElementById('vmail_message').value),
+                Day_Mins: parseFloat(document.getElementById('day_mins').value),
+                Day_Calls: parseInt(document.getElementById('day_calls').value),
+                Day_Charge: parseFloat(document.getElementById('day_charge').value),
+                Eve_Mins: parseFloat(document.getElementById('eve_mins').value),
+                Eve_Calls: parseInt(document.getElementById('eve_calls').value),
+                Eve_Charge: parseFloat(document.getElementById('eve_charge').value),
+                Night_Mins: parseFloat(document.getElementById('night_mins').value),
+                Night_Calls: parseInt(document.getElementById('night_calls').value),
+                Night_Charge: parseFloat(document.getElementById('night_charge').value),
+                Intl_Mins: parseFloat(document.getElementById('intl_mins').value),
+                Intl_Calls: parseInt(document.getElementById('intl_calls').value),
+                Intl_Charge: parseFloat(document.getElementById('intl_charge').value),
+                CustServ_Calls: parseInt(document.getElementById('cust_service_calls').value),
+            };
+
+            const response = await fetch('/predict', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+            document.getElementById('result').innerText = `Prediction: ${result.isFraud ? 'Fraud' : 'Not Fraud'}`;
+        });
+    </script>
+</body>
+</html>
